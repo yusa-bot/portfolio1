@@ -1,26 +1,18 @@
+
+
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { User, Mail, Home, FileText, Code } from 'lucide-react';
+import { User, Mail, Home, FileText, Code } from 'lucide-react'; // FileTextアイコンを追加
 import FooterSection from './components/sections/FooterSection';
 import { motion } from 'framer-motion';
+import ObservabilityHUD from './components/ObservabilityHUD';
 
-interface LayoutProps {
-  children: React.ReactNode;
-  currentPageName: string;
-}
-
-interface NavLink {
-  name: string;
-  page: string;
-  icon: React.ComponentType<{ className?: string }>;
-}
-
-export default function Layout({ children, currentPageName }: LayoutProps) {
+export default function Layout({ children, currentPageName }) {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
-    const handleMouseMove = (event: MouseEvent) => {
+    const handleMouseMove = (event) => {
       setMousePosition({ x: event.clientX, y: event.clientY });
     };
 
@@ -38,7 +30,7 @@ export default function Layout({ children, currentPageName }: LayoutProps) {
     };
   }, []);
 
-  const navLinks: NavLink[] = [
+  const navLinks = [
     { name: 'Top', page: 'Top', icon: Home },
     { name: 'Me', page: 'Me', icon: User },
     { name: 'Updates', page: 'Updates', icon: FileText },
@@ -48,13 +40,13 @@ export default function Layout({ children, currentPageName }: LayoutProps) {
 
   return (
     <div className="bg-white text-slate-800 font-sans antialiased selection:bg-blue-500/20">
-      <div
+      <div 
         className="pointer-events-none fixed inset-0 z-50 transition duration-300"
         style={{
           background: `radial-gradient(600px at ${mousePosition.x}px ${mousePosition.y}px, rgba(29, 78, 216, 0.08), transparent 80%)`
         }}
       ></div>
-
+      
       <div className="flex min-h-screen">
         <div className="flex-1 mr-40">
           <main className="relative z-10">{children}</main>
@@ -92,6 +84,10 @@ export default function Layout({ children, currentPageName }: LayoutProps) {
           </nav>
         </aside>
       </div>
+      
+      {/* Observability HUD */}
+      <ObservabilityHUD />
     </div>
   );
 }
+
