@@ -1,7 +1,7 @@
-import Layout from 'components/layout/Layout'
-import AboutSection from 'components/sections/AboutSection'
-import VisionSection from 'components/sections/VisionSection'
-import ProjectsSection from 'components/sections/ProjectsSection'
+import Layout from '@/components/layout/Layout'
+import { AboutSection } from '@/components/sections/About'
+import { VisionSection } from '@/components/sections/Vision'
+import { ProjectsSection } from '@/components/sections/Projects'
 
 export default function HomePage() {
   return (

@@ -1,10 +1,10 @@
-import Layout from 'components/layout/Layout'
-import Contact from 'components/pages/Contact'
+import Layout from '@/components/layout/Layout'
+import { ContactSection } from '@/components/sections/Contact'
 
 export default function ContactPage() {
   return (
     <Layout currentPageName="Contact">
-      <Contact />
+      <ContactSection />
     </Layout>
   )
 }

@@ -12,7 +12,7 @@ export default function FooterSection() {
   ];
 
   const externalLinks = [
-    { name: 'Qiita', url: 'https://qiita.com/yubot' },
+    { name: 'Qiita', url: 'https://qiita.com/yusa_a' },
     { name: 'Zenn', url: 'https://zenn.dev/ayusa' }
   ];
 
@@ -21,7 +21,7 @@ export default function FooterSection() {
       <div className="container mx-auto px-6 py-12">
         <div className="max-w-5xl mx-auto">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
-            
+
             <div className="lg:col-span-1">
               <h4 className="text-slate-900 mb-4 text-sm font-light uppercase tracking-wider">SOCIAL</h4>
               <div className="space-y-3">
@@ -39,7 +39,7 @@ export default function FooterSection() {
                 )}
               </div>
             </div>
-            
+
             <div className="lg:col-span-1">
               <h4 className="text-slate-900 mb-4 text-sm font-light uppercase tracking-wider">TECH BLOG</h4>
               <div className="space-y-3">
@@ -59,7 +59,7 @@ export default function FooterSection() {
             </div>
 
           </div>
-          
+
           <div className="mt-16 border-t border-slate-200/80 pt-8 flex flex-col md:flex-row justify-between items-center">
             <p className="text-sm text-slate-500">
               © {currentYear} Yusa Aihara. All rights reserved.

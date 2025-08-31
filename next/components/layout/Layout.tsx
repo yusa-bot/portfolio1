@@ -1,8 +1,11 @@
+"use client";
+
+// footer & sidebar
+
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { createPageUrl } from '@/utils';
+import Link from 'next/link';
 import { User, Mail, Home, FileText, Code } from 'lucide-react';
-import FooterSection from './components/sections/FooterSection';
+import { FooterSection } from '../sections/Footer';
 import { motion } from 'framer-motion';
 
 interface LayoutProps {
@@ -67,7 +70,7 @@ export default function Layout({ children, currentPageName }: LayoutProps) {
               {navLinks.map((link) => (
                 <li key={link.name} className="relative">
                   <Link
-                    to={createPageUrl(link.page)}
+                    href={`/${link.page === 'Top' ? '' : link.page.toLowerCase()}`}
                     className={`flex items-center px-4 py-3 rounded-lg transition-colors duration-200 group ${
                       currentPageName === link.page
                         ? 'text-blue-600'
