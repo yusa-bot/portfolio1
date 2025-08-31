@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { getAllProjects } from "../../../service/projectServices";
+import { getAllProjects } from "../../../services/projectServices";
 import { ProjectsTypes } from '../../../components/sections/Projects/types';
 
 // Projectのzodスキーマ

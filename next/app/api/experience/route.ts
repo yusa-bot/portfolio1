@@ -1,6 +1,6 @@
 
 import { z } from "zod";
-import { getAllExperiences } from "../../../service/experienceServices";
+import { getAllExperiences } from "../../../services/experienceServices";
 import { ExperiencesTypes } from '../../../components/sections/Experience/types';
 
 // Experienceのzodスキーマ

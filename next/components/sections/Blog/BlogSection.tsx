@@ -1,11 +1,65 @@
 "use client";
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ExternalLink } from 'lucide-react';
+import { ExternalLink, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { QiitaArticleCard } from '@/components/articles/Qiita/QiitaArticleCard';
+import { QiitaArticle } from '@/components/articles/Qiita/type';
 
 export const BlogSection = () => {
+  const [articles, setArticles] = useState<QiitaArticle[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchQiitaArticles = async (): Promise<QiitaArticle[]> => {
+    try {
+      const response = await fetch('/api/articles/qiita');
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const articles = await response.json();
+      return articles;
+    } catch (error) {
+      console.error('Error fetching Qiita articles:', error);
+      throw error;
+    }
+  };
+
+  useEffect(() => {
+    const loadArticles = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        const fetchedArticles = await fetchQiitaArticles();
+        setArticles(fetchedArticles);
+      } catch (err) {
+        setError('記事の取得に失敗しました');
+        console.error('Error loading articles:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadArticles();
+  }, []);
+
+  const handleRefresh = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      const fetchedArticles = await fetchQiitaArticles();
+      setArticles(fetchedArticles);
+    } catch (err) {
+      setError('記事の取得に失敗しました');
+      console.error('Error refreshing articles:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <section id="blog" className="py-24 bg-slate-50">
       <div className="container mx-auto px-6">
@@ -13,33 +67,80 @@ export const BlogSection = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="max-w-5xl mx-auto text-center"
+          className="max-w-6xl mx-auto"
         >
-          <h2 className="text-center mb-16 font-thin md:text-5xl tracking-tighter">
-            Tech Blog & Updates
-          </h2>
+          <div className="text-center mb-16">
+            <h2 className="text-center mb-8 font-thin md:text-5xl tracking-tighter">
+              Tech Blog & Updates
+            </h2>
+            <p className="text-lg text-slate-600 font-light mb-8">
+              技術記事やアップデートをQiitaで公開しています
+            </p>
 
-          <p className="text-lg text-slate-600 font-light mb-12">
-            技術記事やアップデートは専用ページでご覧いただけます
-          </p>
+            <div className="flex justify-center gap-4 mb-12">
+              <Button
+                variant="outline"
+                className="text-slate-600 hover:text-green-600 border-slate-200"
+                onClick={() => window.open('https://qiita.com/yusa_a', '_blank')}
+              >
+                <ExternalLink className="w-4 h-4 mr-2" />
+                Qiita でもっと見る
+              </Button>
+              <Button
+                variant="outline"
+                className="text-slate-600 hover:text-blue-600 border-slate-200"
+                onClick={() => window.open('https://zenn.dev/ayusa', '_blank')}
+              >
+                <ExternalLink className="w-4 h-4 mr-2" />
+                Zenn でもっと見る
+              </Button>
+              <Button
+                variant="outline"
+                onClick={handleRefresh}
+                disabled={isLoading}
+                className="text-slate-600 hover:text-slate-800 border-slate-200"
+              >
+                <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+                更新
+              </Button>
+            </div>
+          </div>
 
-          <div className="flex justify-center gap-4">
-            <Button
-              variant="outline"
-              className="text-slate-600 hover:text-green-600 border-slate-200"
-              onClick={() => window.open('https://qiita.com/yusa_a', '_blank')}
-            >
-              <ExternalLink className="w-4 h-4 mr-2" />
-              Qiita でもっと見る
-            </Button>
-            <Button
-              variant="outline"
-              className="text-slate-600 hover:text-blue-600 border-slate-200"
-              onClick={() => window.open('https://zenn.dev/ayusa', '_blank')}
-            >
-              <ExternalLink className="w-4 h-4 mr-2" />
-              Zenn でもっと見る
-            </Button>
+          {/* 最新記事セクション */}
+          <div className="mb-12">
+            <h3 className="text-2xl font-semibold text-slate-800 mb-8 text-center">
+              最新記事
+            </h3>
+
+            {isLoading && (
+              <div className="flex justify-center items-center py-12">
+                <RefreshCw className="w-8 h-8 animate-spin text-slate-400" />
+                <span className="ml-2 text-slate-600">読み込み中...</span>
+              </div>
+            )}
+
+            {error && (
+              <div className="text-center py-12">
+                <p className="text-red-600 mb-4">{error}</p>
+                <Button onClick={handleRefresh} variant="outline">
+                  再試行
+                </Button>
+              </div>
+            )}
+
+            {!isLoading && !error && articles.length > 0 && (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {articles.map((article) => (
+                  <QiitaArticleCard key={article.id} article={article} />
+                ))}
+              </div>
+            )}
+
+            {!isLoading && !error && articles.length === 0 && (
+              <div className="text-center py-12">
+                <p className="text-slate-600">記事が見つかりませんでした</p>
+              </div>
+            )}
           </div>
         </motion.div>
       </div>

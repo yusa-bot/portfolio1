@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { getAllSkills } from "../../../service/skillsServices";
+import { getAllSkills } from "../../../services/skillsServices";
 import { SkillsTypes } from '../../../components/sections/Skills/types';
 
 // Skillsのzodスキーマ

@@ -2,6 +2,7 @@ import Layout from '@/components/layout/Layout'
 import { AboutSection } from '@/components/sections/About'
 import { VisionSection } from '@/components/sections/Vision'
 import { ProjectsSection } from '@/components/sections/Projects'
+import { BlogSection } from '@/components/sections/Blog'
 
 export default function HomePage() {
   return (
@@ -13,6 +14,7 @@ export default function HomePage() {
         <AboutSection />
         <VisionSection />
         <ProjectsSection />
+        <BlogSection />
       </div>
     </Layout>
   )
