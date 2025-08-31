@@ -4,17 +4,24 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ExternalLink, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { QiitaArticleCard } from '@/components/articles/Qiita/QiitaArticleCard';
-import { QiitaArticle } from '@/components/articles/Qiita/type';
+import { QiitaArticleCard } from '@/components/updates/articles/Qiita/QiitaArticleCard';
+import { QiitaArticle } from '@/components/updates/articles/Qiita/type';
+import { ZennArticleCard } from '@/components/updates/articles/zenn/ZennArticleCard';
+import { ZennArticle } from '@/components/updates/articles/zenn/type';
+import { ZennScrapCard } from '@/components/updates/zenn_scrap/ZennScrapCard';
+import { ZennScrap } from '@/components/updates/zenn_scrap/type';
+import { ZennScrapMain } from '@/components/updates/zenn_scrap/ZennScrapMain';
 
 export const BlogSection = () => {
   const [articles, setArticles] = useState<QiitaArticle[]>([]);
+  const [zennArticles, setZennArticles] = useState<ZennArticle[]>([]);
+  const [zennScrap, setZennScrap] = useState<ZennScrap | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const fetchQiitaArticles = async (): Promise<QiitaArticle[]> => {
     try {
-      const response = await fetch('/api/articles/qiita');
+      const response = await fetch('/api/updates/articles/qiita');
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -28,13 +35,51 @@ export const BlogSection = () => {
     }
   };
 
+  const fetchZennArticles = async (): Promise<ZennArticle[]> => {
+    try {
+      const response = await fetch('/api/updates/articles/zenn');
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const articles = await response.json();
+      return articles;
+    } catch (error) {
+      console.error('Error fetching Zenn articles:', error);
+      throw error;
+    }
+  };
+
+  const fetchZennScrap = async (): Promise<ZennScrap | null> => {
+    try {
+      const response = await fetch('/api/updates/zenn_scrap');
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data.scrap;
+    } catch (error) {
+      console.error('Error fetching Zenn scrap:', error);
+      throw error;
+    }
+  };
+
   useEffect(() => {
     const loadArticles = async () => {
       try {
         setIsLoading(true);
         setError(null);
-        const fetchedArticles = await fetchQiitaArticles();
-        setArticles(fetchedArticles);
+        const [fetchedQiitaArticles, fetchedZennArticles, fetchedZennScrap] = await Promise.all([
+          fetchQiitaArticles(),
+          fetchZennArticles(),
+          fetchZennScrap()
+        ]);
+        setArticles(fetchedQiitaArticles);
+        setZennArticles(fetchedZennArticles);
+        setZennScrap(fetchedZennScrap);
       } catch (err) {
         setError('記事の取得に失敗しました');
         console.error('Error loading articles:', err);
@@ -50,8 +95,14 @@ export const BlogSection = () => {
     try {
       setIsLoading(true);
       setError(null);
-      const fetchedArticles = await fetchQiitaArticles();
-      setArticles(fetchedArticles);
+      const [fetchedQiitaArticles, fetchedZennArticles, fetchedZennScrap] = await Promise.all([
+        fetchQiitaArticles(),
+        fetchZennArticles(),
+        fetchZennScrap()
+      ]);
+      setArticles(fetchedQiitaArticles);
+      setZennArticles(fetchedZennArticles);
+      setZennScrap(fetchedZennScrap);
     } catch (err) {
       setError('記事の取得に失敗しました');
       console.error('Error refreshing articles:', err);
@@ -76,35 +127,14 @@ export const BlogSection = () => {
             <p className="text-lg text-slate-600 font-light mb-8">
               技術記事やアップデートをQiitaで公開しています
             </p>
-
-            <div className="flex justify-center gap-4 mb-12">
-              <Button
-                variant="outline"
-                className="text-slate-600 hover:text-green-600 border-slate-200"
-                onClick={() => window.open('https://qiita.com/yusa_a', '_blank')}
-              >
-                <ExternalLink className="w-4 h-4 mr-2" />
-                Qiita でもっと見る
-              </Button>
-              <Button
-                variant="outline"
-                className="text-slate-600 hover:text-blue-600 border-slate-200"
-                onClick={() => window.open('https://zenn.dev/ayusa', '_blank')}
-              >
-                <ExternalLink className="w-4 h-4 mr-2" />
-                Zenn でもっと見る
-              </Button>
-              <Button
-                variant="outline"
-                onClick={handleRefresh}
-                disabled={isLoading}
-                className="text-slate-600 hover:text-slate-800 border-slate-200"
-              >
-                <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
-                更新
-              </Button>
-            </div>
           </div>
+
+          {/* メインコンテンツ: 現在のアジェンダ（Scrap） */}
+          {!isLoading && !error && zennScrap && (
+            <div className="mb-16">
+              <ZennScrapMain scrap={zennScrap} />
+            </div>
+          )}
 
           {/* 最新記事セクション */}
           <div className="mb-12">
@@ -128,19 +158,80 @@ export const BlogSection = () => {
               </div>
             )}
 
-            {!isLoading && !error && articles.length > 0 && (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {articles.map((article) => (
-                  <QiitaArticleCard key={article.id} article={article} />
-                ))}
+            {!isLoading && !error && (articles.length > 0 || zennArticles.length > 0) && (
+              <div className="space-y-12">
+                {/* Qiita記事 */}
+                {articles.length > 0 && (
+                  <div>
+                    <h4 className="text-xl font-semibold text-slate-700 mb-6 flex items-center gap-2">
+                      <span className="w-6 h-6 bg-green-500 rounded text-white text-sm flex items-center justify-center">Q</span>
+                      Qiita記事
+                    </h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                      {articles.map((article) => (
+                        <QiitaArticleCard key={article.id} article={article} />
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Zenn記事 */}
+                {zennArticles.length > 0 && (
+                  <div>
+                    <h4 className="text-xl font-semibold text-slate-700 mb-6 flex items-center gap-2">
+                      <span className="w-6 h-6 bg-blue-500 rounded text-white text-sm flex items-center justify-center">Z</span>
+                      Zenn記事
+                    </h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                      {zennArticles.map((article) => (
+                        <ZennArticleCard key={article.id} article={article} />
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 
-            {!isLoading && !error && articles.length === 0 && (
+            {!isLoading && !error && articles.length === 0 && zennArticles.length === 0 && (
               <div className="text-center py-12">
                 <p className="text-slate-600">記事が見つかりませんでした</p>
               </div>
             )}
+          </div>
+          <div className="flex justify-center gap-4 mb-12">
+            <Button
+              variant="outline"
+              className="text-slate-600 hover:text-green-600 border-slate-200"
+              onClick={() => window.open('https://qiita.com/yusa_a', '_blank')}
+            >
+              <ExternalLink className="w-4 h-4 mr-2" />
+              Qiita でもっと見る
+            </Button>
+            <Button
+              variant="outline"
+              className="text-slate-600 hover:text-blue-600 border-slate-200"
+              onClick={() => window.open('https://zenn.dev/ayusa', '_blank')}
+            >
+              <ExternalLink className="w-4 h-4 mr-2" />
+              Zenn でもっと見る
+            </Button>
+            <Button
+              variant="outline"
+              className="text-slate-600 hover:text-purple-600 border-slate-200"
+              onClick={() => window.open('https://zenn.dev/ayusa/scraps', '_blank')}
+            >
+              <ExternalLink className="w-4 h-4 mr-2" />
+              Scrap でもっと見る
+            </Button>
+            <Button
+              variant="outline"
+              onClick={handleRefresh}
+              disabled={isLoading}
+              className="text-slate-600 hover:text-slate-800 border-slate-200"
+            >
+              <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+              更新
+            </Button>
           </div>
         </motion.div>
       </div>

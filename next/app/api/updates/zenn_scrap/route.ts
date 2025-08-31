@@ -1,0 +1,130 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { load } from 'cheerio';
+import { z } from 'zod';
+
+const ZennScrapSchema = z.object({
+  id: z.number(),
+  post_type: z.string(),
+  user_id: z.number(),
+  slug: z.string(),
+  title: z.string(),
+  closed: z.boolean(),
+  closed_at: z.string().nullable(),
+  archived: z.boolean(),
+  liked_count: z.number(),
+  can_others_post: z.boolean(),
+  comments_count: z.number(),
+  created_at: z.string(),
+  last_comment_created_at: z.string().nullable(),
+  should_noindex: z.boolean(),
+  path: z.string(),
+  unlisted: z.boolean(),
+  topics: z.array(z.any()),
+  user: z.object({
+    id: z.number(),
+    username: z.string(),
+    name: z.string(),
+    avatar_small_url: z.string(),
+  }),
+});
+
+const ZennScrapResponseSchema = z.object({
+  scraps: z.array(ZennScrapSchema),
+  next_page: z.string().nullable(),
+});
+
+async function fetchZennScrapContent(scrapUrl: string): Promise<string> {
+  const response = await fetch(scrapUrl);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch scrap: ${response.status}`);
+  }
+
+  const html = await response.text();
+
+  // cheerioを使ってHTMLをパース
+  const $ = load(html);
+
+  // __NEXT_DATA__からJSONデータを抽出
+  const nextDataScript = $('script#__NEXT_DATA__').html();
+
+  if (!nextDataScript) {
+    throw new Error('__NEXT_DATA__ not found');
+  }
+
+  const nextData = JSON.parse(nextDataScript);   // JSON文字列 → オブジェクト化
+  const props = nextData.props;                  // Next.jsのprops全体
+  const pageProps = props.pageProps;             // ページ固有のデータ
+  const comments = pageProps.comments;           // コメント一覧
+
+  // Zenn Scrapの本文はcommentsの最初のbodyHtmlに入っている
+  if (comments.length > 0) {
+    const firstComment = comments[0];
+    if (firstComment.bodyHtml) {
+      return firstComment.bodyHtml;
+    }
+  }
+
+  throw new Error('body content not found');
+}
+
+export async function GET(request: NextRequest) {
+  try {
+    const username = 'ayusa';
+    const response = await fetch(
+      `https://zenn.dev/api/scraps?username=${username}&order=latest`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Zenn Scrap API error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    const validatedData = ZennScrapResponseSchema.parse(data);
+
+    // 最新1件のScrapを取得
+    const latestScrap = validatedData.scraps[0];
+
+    if (!latestScrap) {
+      return NextResponse.json({ scrap: null });
+    }
+
+    // Scrapの本文も取得
+    const scrapUrl = `https://zenn.dev${latestScrap.path}`;
+    const scrapDetails = await fetchZennScrapContent(scrapUrl);
+
+    // データを整形
+    const formattedScrap = {
+      id: latestScrap.id.toString(),
+      slug: latestScrap.slug,
+      title: latestScrap.title,
+      url: scrapUrl,
+      createdAt: latestScrap.created_at,
+      lastCommentAt: latestScrap.last_comment_created_at,
+      likesCount: latestScrap.liked_count,
+      commentsCount: latestScrap.comments_count,
+      closed: latestScrap.closed,
+      archived: latestScrap.archived,
+      canOthersPost: latestScrap.can_others_post,
+      author: {
+        id: latestScrap.user.username,
+        name: latestScrap.user.name,
+        profileImageUrl: latestScrap.user.avatar_small_url,
+      },
+      topics: latestScrap.topics,
+      bodyMarkdown: scrapDetails,
+    };
+
+    return NextResponse.json({ scrap: formattedScrap });
+  } catch (error) {
+    console.error('Error fetching Zenn scrap:', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch scrap' },
+      { status: 500 }
+    );
+  }
+}
