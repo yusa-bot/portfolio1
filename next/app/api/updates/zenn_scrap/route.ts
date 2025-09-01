@@ -34,75 +34,65 @@ const ZennScrapResponseSchema = z.object({
 });
 
 async function fetchZennScrapContent(scrapUrl: string): Promise<string> {
-  const response = await fetch(scrapUrl);
-  if (!response.ok) {
-    throw new Error(`Failed to fetch scrap: ${response.status}`);
-  }
+  try {
+    const response = await fetch(scrapUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+      },
+      cache: 'no-store',
+    });
 
-  const html = await response.text();
+    if (!response.ok) {
+      throw new Error(`Failed to fetch scrap: ${response.status}`);
+    }
 
-  // cheerioを使ってHTMLをパース
-  const $ = load(html);
+    const html = await response.text();
+    const $ = load(html);
+    const nextDataScript = $('script#__NEXT_DATA__').html();
 
-  // __NEXT_DATA__からJSONデータを抽出
-  const nextDataScript = $('script#__NEXT_DATA__').html();
+    if (!nextDataScript) {
+      throw new Error('__NEXT_DATA__ not found');
+    }
 
-  if (!nextDataScript) {
-    throw new Error('__NEXT_DATA__ not found');
-  }
+    const nextData = JSON.parse(nextDataScript);
+    const comments = nextData.props.pageProps.comments as Array<{ bodyHtml?: string }>;
 
-  const nextData = JSON.parse(nextDataScript);   // JSON文字列 → オブジェクト化
-  const props = nextData.props;                  // Next.jsのprops全体
-  const pageProps = props.pageProps;             // ページ固有のデータ
-  const comments = pageProps.comments as Array<{ bodyHtml?: string }>;           // コメント一覧
+    if (comments.length > 0) {
+      // "今期のアジェンダ"を含むコメントを検索
+      const targetComment = comments.find(comment =>
+        comment.bodyHtml?.includes('今期のアジェンダ')
+      );
 
-  // Zenn Scrapの本文から特定のワードを含むコメントを取得
-  if (comments.length > 0) {
-    console.log(`Found ${comments.length} comments`);
-
-    // 各コメントの内容をチェック
-    comments.forEach((comment, index) => {
-      if (comment.bodyHtml) {
-        console.log(`Comment ${index} preview: ${comment.bodyHtml.substring(0, 200)}...`);
+      if (targetComment?.bodyHtml) {
+        return targetComment.bodyHtml;
       }
-    });
 
-    // "<<今期>>"を含むコメントを検索（HTMLエンコードされた形式も考慮）
-    const targetComment = comments.find((comment, index) => {
-      if (!comment.bodyHtml) return false;
-      const hasKeyword = comment.bodyHtml.includes('&lt;&lt;今期&gt;&gt;') ||
-                        comment.bodyHtml.includes('<<今期>>')
-
-      console.log(`Comment ${index}: contains target keyword = ${hasKeyword}`);
-
-      return hasKeyword;
-    });
-
-    if (targetComment && targetComment.bodyHtml) {
-      console.log('Using target comment with keyword');
-      return targetComment.bodyHtml;
+      // 見つからない場合は最初のコメントを返す
+      return comments[0]?.bodyHtml || '';
     }
 
-    // 見つからない場合は最初のコメントをフォールバック
-    console.log('Target keyword not found, using first comment as fallback');
-    const firstComment = comments[0];
-    if (firstComment.bodyHtml) {
-      return firstComment.bodyHtml;
-    }
+    throw new Error('No comments found');
+  } catch (error) {
+    console.error('Error in fetchZennScrapContent:', error);
+    throw error;
   }
-
-  throw new Error('body content not found');
 }
 
 export async function GET(request: NextRequest) {
   try {
     const username = 'ayusa';
+    const timestamp = Date.now();
+
     const response = await fetch(
-      `https://zenn.dev/api/scraps?username=${username}&order=latest`,
+      `https://zenn.dev/api/scraps?username=${username}&order=latest&_t=${timestamp}`,
       {
         headers: {
           'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
         },
+        cache: 'no-store',
       }
     );
 
@@ -113,18 +103,15 @@ export async function GET(request: NextRequest) {
     const data = await response.json();
     const validatedData = ZennScrapResponseSchema.parse(data);
 
-    // 最新1件のScrapを取得
-    const latestScrap = validatedData.scraps[0];
-
-    if (!latestScrap) {
+    if (!validatedData.scraps.length) {
       return NextResponse.json({ scrap: null });
     }
 
-    // Scrapの本文も取得
+    // 最新のScrapから「今期のアジェンダ」を含むコメントを取得
+    const latestScrap = validatedData.scraps[0];
     const scrapUrl = `https://zenn.dev${latestScrap.path}`;
     const scrapDetails = await fetchZennScrapContent(scrapUrl);
 
-    // データを整形
     const formattedScrap = {
       id: latestScrap.id.toString(),
       slug: latestScrap.slug,
@@ -146,7 +133,11 @@ export async function GET(request: NextRequest) {
       bodyMarkdown: scrapDetails,
     };
 
-    return NextResponse.json({ scrap: formattedScrap });
+    return NextResponse.json({ scrap: formattedScrap }, {
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+      },
+    });
   } catch (error) {
     console.error('Error fetching Zenn scrap:', error);
     return NextResponse.json(
