@@ -121,11 +121,8 @@ export const BlogSection = () => {
         >
           <div className="text-center mb-16">
             <h2 className="text-center mb-8 font-thin md:text-5xl tracking-tighter">
-              Tech Blog & Updates
+              Updates
             </h2>
-            <p className="text-lg text-slate-600 font-light mb-8">
-              技術記事やアップデートをQiitaで公開しています
-            </p>
           </div>
 
           {/* メインコンテンツ: 現在のアジェンダ（Scrap） */}

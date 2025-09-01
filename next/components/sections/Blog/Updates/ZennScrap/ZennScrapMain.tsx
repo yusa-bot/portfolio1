@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 import { Calendar, Heart, MessageCircle, ExternalLink, Users, Lock } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
@@ -14,6 +15,8 @@ interface ZennScrapMainProps {
 }
 
 export const ZennScrapMain: React.FC<ZennScrapMainProps> = ({ scrap }) => {
+  const router = useRouter();
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('ja-JP', {
@@ -38,6 +41,11 @@ export const ZennScrapMain: React.FC<ZennScrapMainProps> = ({ scrap }) => {
     window.open(scrap.url, '_blank', 'noopener,noreferrer');
   };
 
+  const handleViewTech = () => {
+    router.push('/techstack#zenn-scrap');
+  };
+
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -45,56 +53,29 @@ export const ZennScrapMain: React.FC<ZennScrapMainProps> = ({ scrap }) => {
       transition={{ duration: 0.6 }}
       className="max-w-4xl mx-auto"
     >
+      <div className="mb-8">
+        <h1 className="text-3xl font-thin  text-slate-600 mb-4">
+          今期のアジェンダ
+        </h1>
+        <p className="text-lg text-slate-600 font-light">
+          Zennのscrap機能はリアルタイムで進行中の議題の情報発信ツールとして最適です。<br />
+          そのため個人スクラムシートとして活用し、今期の個人目標を記載しています。<br />
+          API取得からの表示までの実装工夫を記載しています。
+          <Button
+              onClick={handleViewTech}
+              className="bg-purple-600 hover:bg-purple-700 text-white"
+              size="sm"
+          >
+            <ExternalLink className="w-3 h-3 mr-1" />
+          </Button>
+        </p>
+      </div>
       <Card className="border-purple-200 bg-gradient-to-br from-purple-50 to-white shadow-lg">
         <CardHeader className="border-b border-purple-100 bg-purple-50/50">
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1">
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-purple-600 text-sm font-medium flex items-center gap-1">
-                  📝 現在のアジェンダ（Scrap）
-                </span>
-                <div className="flex gap-2">
-                  {scrap.closed && (
-                    <Badge className="text-xs bg-gray-100 text-gray-600">
-                      <Lock className="w-3 h-3 mr-1" />
-                      クローズ済み
-                    </Badge>
-                  )}
-                  {scrap.canOthersPost && (
-                    <Badge variant="secondary" className="text-xs bg-purple-100 text-purple-700">
-                      <Users className="w-3 h-3 mr-1" />
-                      コラボ可能
-                    </Badge>
-                  )}
-                </div>
-              </div>
-
-              <h2 className="text-2xl md:text-3xl font-bold text-slate-800 mb-4">
-                {scrap.title}
-              </h2>
-
-              <div className="flex items-center gap-6 text-sm text-slate-600 mb-4">
-                <div className="flex items-center gap-1">
-                  <Calendar className="w-4 h-4" />
-                  <span>開始: {formatDate(scrap.createdAt)}</span>
-                </div>
-                {scrap.lastCommentAt && (
-                  <div className="flex items-center gap-1">
-                    <MessageCircle className="w-4 h-4" />
-                    <span>最終更新: {formatRelativeTime(scrap.lastCommentAt)}</span>
-                  </div>
-                )}
-                <div className="flex items-center gap-1">
-                  <Heart className="w-4 h-4" />
-                  <span>{scrap.likesCount} いいね</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <MessageCircle className="w-4 h-4" />
-                  <span>{scrap.commentsCount} コメント</span>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3">
+              {/* ユーザー情報 */}
+              <div className="flex items-center gap-3 mb-3">
                 <img
                   src={scrap.author.profileImageUrl}
                   alt={scrap.author.name}
@@ -106,16 +87,36 @@ export const ZennScrapMain: React.FC<ZennScrapMainProps> = ({ scrap }) => {
                   </span>
                   <span className="text-xs text-slate-500 block">@{scrap.author.id}</span>
                 </div>
+                {scrap.closed && (
+                  <Badge className="text-xs bg-gray-100 text-gray-600 ml-2">
+                    <Lock className="w-3 h-3 mr-1" />
+                    クローズ済み
+                  </Badge>
+                )}
+              </div>
+
+              {/* 日付情報 */}
+              <div className="flex items-center gap-4 text-sm text-slate-600">
+                <div className="flex items-center gap-1">
+                  <Calendar className="w-4 h-4" />
+                  <span>開始: {formatDate(scrap.createdAt)}</span>
+                </div>
+                {scrap.lastCommentAt && (
+                  <div className="flex items-center gap-1">
+                    <MessageCircle className="w-4 h-4" />
+                    <span>最終更新: {formatRelativeTime(scrap.lastCommentAt)}</span>
+                  </div>
+                )}
               </div>
             </div>
 
+            {/* 詳細ボタン */}
             <Button
               onClick={handleViewScrap}
               className="bg-purple-600 hover:bg-purple-700 text-white"
-              size="lg"
+              size="sm"
             >
-              <ExternalLink className="w-4 h-4 mr-2" />
-              Scrapで詳細を見る
+              <ExternalLink className="w-3 h-3 mr-1" />
             </Button>
           </div>
         </CardHeader>

@@ -37,7 +37,7 @@ export const ThisPageTech: React.FC<ThisPageTechProps> = ({ className = '' }) =>
           </div>
 
           {/* 区切り線 */}
-          <div className="border-t border-slate-200 mb-16"></div>
+          <div id="zenn-scrap" className="border-t border-slate-200 mb-16"></div>
 
           {/* Scrap処理フロー */}
           <div className="mb-12">
