@@ -1,0 +1,305 @@
+/* Zenn Scrap Content Styles */
+
+.zenn-content-structured {
+  max-width: none;
+}
+
+/* Fallback styles for legacy HTML content */
+.zenn-scrap-content-fallback {
+  max-width: none;
+}
+
+.zenn-scrap-content-fallback h1,
+.zenn-scrap-content-fallback h2,
+.zenn-scrap-content-fallback h3,
+.zenn-scrap-content-fallback h4,
+.zenn-scrap-content-fallback h5,
+.zenn-scrap-content-fallback h6 {
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  color: rgb(30 41 59);
+}
+
+.zenn-scrap-content-fallback h1 {
+  font-size: 1.875rem;
+  border-bottom: 2px solid rgb(196 181 253);
+  padding-bottom: 0.5rem;
+}
+
+.zenn-scrap-content-fallback h2 {
+  font-size: 1.5rem;
+  border-bottom: 1px solid rgb(221 214 254);
+  padding-bottom: 0.5rem;
+}
+
+.zenn-scrap-content-fallback h3 {
+  font-size: 1.25rem;
+}
+
+.zenn-scrap-content-fallback h4 {
+  font-size: 1.125rem;
+}
+
+.zenn-scrap-content-fallback p {
+  margin-bottom: 1rem;
+  line-height: 1.625;
+  color: rgb(51 65 85);
+}
+
+.zenn-scrap-content-fallback ul,
+.zenn-scrap-content-fallback ol {
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+}
+
+.zenn-scrap-content-fallback li {
+  margin-bottom: 0.5rem;
+  line-height: 1.625;
+  color: rgb(51 65 85);
+}
+
+/* List styles */
+.zenn-content-structured ul {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.zenn-content-structured ol {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.zenn-content-structured li {
+  color: rgb(51 65 85);
+  line-height: 1.625;
+  padding-left: 0.5rem;
+}
+
+.zenn-content-structured ul li {
+  list-style-type: disc;
+  list-style-position: outside;
+}
+
+.zenn-content-structured ol li {
+  list-style-type: decimal;
+  list-style-position: outside;
+}
+
+/* Nested lists */
+.zenn-content-structured ul ul,
+.zenn-content-structured ol ol,
+.zenn-content-structured ul ol,
+.zenn-content-structured ol ul {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  margin-left: 1rem;
+}
+
+.zenn-content-structured ul ul li,
+.zenn-content-structured ol ol li,
+.zenn-content-structured ul ol li,
+.zenn-content-structured ol ul li {
+  font-size: 0.875rem;
+}
+
+/* List markers */
+.zenn-content-structured ul {
+  list-style: none;
+  padding-left: 1rem;
+}
+
+.zenn-content-structured ul li:before {
+  content: "•";
+  color: rgb(147 51 234);
+  font-weight: bold;
+  display: inline-block;
+  width: 1em;
+  margin-left: -1em;
+}
+
+.zenn-content-structured ol {
+  padding-left: 1rem;
+}
+
+.zenn-content-structured ol li {
+  counter-increment: item;
+}
+
+/* Code styles */
+.zenn-content-structured code:not(pre code),
+.zenn-scrap-content-fallback code:not(pre code) {
+  background-color: rgb(243 232 255);
+  color: rgb(107 33 168);
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+}
+
+.zenn-content-structured pre,
+.zenn-scrap-content-fallback pre {
+  margin: 1rem 0;
+  background-color: rgb(30 41 59);
+  color: rgb(241 245 249);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.625;
+}
+
+.zenn-content-structured pre code,
+.zenn-scrap-content-fallback pre code {
+  background-color: transparent;
+  color: inherit;
+  padding: 0;
+}
+
+/* Link styles */
+.zenn-content-structured a,
+.zenn-scrap-content-fallback a {
+  color: rgb(147 51 234);
+  text-decoration: underline;
+  text-decoration-color: rgb(196 181 253);
+  transition: color 0.2s ease;
+}
+
+.zenn-content-structured a:hover,
+.zenn-scrap-content-fallback a:hover {
+  color: rgb(107 33 168);
+  text-decoration-color: rgb(147 51 234);
+}
+
+/* Strong and emphasis */
+.zenn-content-structured strong,
+.zenn-scrap-content-fallback strong {
+  font-weight: 600;
+  color: rgb(30 41 59);
+}
+
+.zenn-content-structured em,
+.zenn-scrap-content-fallback em {
+  font-style: italic;
+  color: rgb(71 85 105);
+}
+
+/* Table styles */
+.zenn-content-structured table,
+.zenn-scrap-content-fallback table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid rgb(203 213 225);
+  margin: 1rem 0;
+}
+
+.zenn-content-structured th,
+.zenn-scrap-content-fallback th {
+  background-color: rgb(250 245 255);
+  border: 1px solid rgb(203 213 225);
+  padding: 0.75rem;
+  text-align: left;
+  font-weight: 600;
+  color: rgb(30 41 59);
+}
+
+.zenn-content-structured td,
+.zenn-scrap-content-fallback td {
+  border: 1px solid rgb(203 213 225);
+  padding: 0.75rem;
+  color: rgb(51 65 85);
+}
+
+/* Image styles */
+.zenn-content-structured img,
+.zenn-scrap-content-fallback img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  margin: 1rem 0;
+}
+
+/* Horizontal rule */
+.zenn-content-structured hr,
+.zenn-scrap-content-fallback hr {
+  border: 0;
+  border-top: 1px solid rgb(203 213 225);
+  margin: 1.5rem 0;
+}
+
+/* Paragraph spacing */
+.zenn-content-structured p {
+  margin-bottom: 1rem;
+}
+
+.zenn-content-structured p:last-child {
+  margin-bottom: 0;
+}
+
+/* Blockquote styles */
+.zenn-content-structured blockquote,
+.zenn-scrap-content-fallback blockquote {
+  border-left: 4px solid rgb(196 181 253);
+  padding-left: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  background-color: rgb(250 245 255 / 0.5);
+  border-radius: 0 0.5rem 0.5rem 0;
+  font-style: italic;
+  color: rgb(71 85 105);
+  margin: 1rem 0;
+}
+
+.zenn-content-structured blockquote p,
+.zenn-scrap-content-fallback blockquote p {
+  margin-bottom: 0.5rem;
+}
+
+.zenn-content-structured blockquote p:last-child,
+.zenn-scrap-content-fallback blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+.zenn-content-structured blockquote code,
+.zenn-scrap-content-fallback blockquote code {
+  background-color: rgb(233 213 255);
+  color: rgb(88 28 135);
+}
+
+/* Task lists (GitHub-style checkboxes) */
+.zenn-content-structured input[type="checkbox"],
+.zenn-scrap-content-fallback input[type="checkbox"] {
+  margin-right: 0.5rem;
+  accent-color: rgb(147 51 234);
+}
+
+.zenn-content-structured .task-list-item,
+.zenn-scrap-content-fallback .task-list-item {
+  list-style: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .zenn-content-structured,
+  .zenn-scrap-content-fallback {
+    font-size: 0.875rem;
+  }
+
+  .zenn-content-structured pre,
+  .zenn-scrap-content-fallback pre {
+    font-size: 0.75rem;
+  }
+
+  .zenn-scrap-content-fallback h1 {
+    font-size: 1.5rem;
+  }
+
+  .zenn-scrap-content-fallback h2 {
+    font-size: 1.25rem;
+  }
+
+  .zenn-scrap-content-fallback h3 {
+    font-size: 1.125rem;
+  }
+}

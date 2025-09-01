@@ -83,3 +83,6 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Import Zenn content styles */
+@import '../components/updates/zenn_scrap/zenn-content.css';

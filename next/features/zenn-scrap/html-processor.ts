@@ -1,16 +1,7 @@
 import { load } from 'cheerio';
+import type { StructuredElement, ProcessedHtml } from '../../types/zenn-scrap';
 
-export interface StructuredElement {
-  type: string;
-  content: string;
-  level?: number;
-}
-
-export interface ProcessedHtml {
-  raw: string;
-  cleaned: string;
-  structured: StructuredElement[];
-}
+export type { StructuredElement, ProcessedHtml } from '../../types/zenn-scrap';
 
 export function processHtml(html: string): ProcessedHtml {
   const cleaned = cleanZennHtml(html);
@@ -23,6 +14,7 @@ export function processHtml(html: string): ProcessedHtml {
   };
 }
 
+// Zennの内部処理用の属性を削除
 function cleanZennHtml(html: string): string {
   const $ = load(html);
 

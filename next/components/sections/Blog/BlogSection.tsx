@@ -8,7 +8,6 @@ import { QiitaArticleCard } from '@/components/updates/articles/Qiita/QiitaArtic
 import { QiitaArticle } from '@/components/updates/articles/Qiita/type';
 import { ZennArticleCard } from '@/components/updates/articles/zenn/ZennArticleCard';
 import { ZennArticle } from '@/components/updates/articles/zenn/type';
-import { ZennScrapCard } from '@/components/updates/zenn_scrap/ZennScrapCard';
 import { ZennScrap } from '@/components/updates/zenn_scrap/type';
 import { ZennScrapMain } from '@/components/updates/zenn_scrap/ZennScrapMain';
 

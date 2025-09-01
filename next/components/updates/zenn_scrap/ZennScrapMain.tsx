@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ZennScrap } from '@/components/updates/zenn_scrap/type';
+import { ZennContentRenderer } from '@/components/updates/zenn_scrap/ZennContentRenderer';
 
 interface ZennScrapMainProps {
   scrap: ZennScrap;
@@ -120,10 +121,28 @@ export const ZennScrapMain: React.FC<ZennScrapMainProps> = ({ scrap }) => {
         </CardHeader>
 
         <CardContent className="pt-6">
-          {scrap.bodyMarkdown ? (
-            <div className="prose prose-slate max-w-none text-slate-700 leading-relaxed">
+          {scrap.content && scrap.content.structured.length > 0 ? (
+            <div className="prose max-w-none text-slate-700 leading-relaxed">
+              <ZennContentRenderer
+                elements={scrap.content.structured}
+                className="mb-6"
+              />
+
+              <div className="mt-6 pt-4 border-t border-purple-100 text-center">
+                <Button
+                  onClick={handleViewScrap}
+                  variant="outline"
+                  className="border-purple-200 text-purple-600 hover:bg-purple-50"
+                >
+                  <ExternalLink className="w-4 h-4 mr-2" />
+                  Zennで続きを読む
+                </Button>
+              </div>
+            </div>
+          ) : scrap.bodyMarkdown ? (
+            <div className="prose max-w-none text-slate-700 leading-relaxed">
               <div
-                className="zenn-scrap-content"
+                className="zenn-scrap-content-fallback"
                 dangerouslySetInnerHTML={{ __html: scrap.bodyMarkdown }}
               />
 
