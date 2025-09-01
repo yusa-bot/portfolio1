@@ -54,10 +54,37 @@ async function fetchZennScrapContent(scrapUrl: string): Promise<string> {
   const nextData = JSON.parse(nextDataScript);   // JSON文字列 → オブジェクト化
   const props = nextData.props;                  // Next.jsのprops全体
   const pageProps = props.pageProps;             // ページ固有のデータ
-  const comments = pageProps.comments;           // コメント一覧
+  const comments = pageProps.comments as Array<{ bodyHtml?: string }>;           // コメント一覧
 
-  // Zenn Scrapの本文はcommentsの最初のbodyHtmlに入っている
+  // Zenn Scrapの本文から特定のワードを含むコメントを取得
   if (comments.length > 0) {
+    console.log(`Found ${comments.length} comments`);
+
+    // 各コメントの内容をチェック
+    comments.forEach((comment, index) => {
+      if (comment.bodyHtml) {
+        console.log(`Comment ${index} preview: ${comment.bodyHtml.substring(0, 200)}...`);
+      }
+    });
+
+    // "<<今期>>"を含むコメントを検索（HTMLエンコードされた形式も考慮）
+    const targetComment = comments.find((comment, index) => {
+      if (!comment.bodyHtml) return false;
+      const hasKeyword = comment.bodyHtml.includes('&lt;&lt;今期&gt;&gt;') ||
+                        comment.bodyHtml.includes('<<今期>>')
+
+      console.log(`Comment ${index}: contains target keyword = ${hasKeyword}`);
+
+      return hasKeyword;
+    });
+
+    if (targetComment && targetComment.bodyHtml) {
+      console.log('Using target comment with keyword');
+      return targetComment.bodyHtml;
+    }
+
+    // 見つからない場合は最初のコメントをフォールバック
+    console.log('Target keyword not found, using first comment as fallback');
     const firstComment = comments[0];
     if (firstComment.bodyHtml) {
       return firstComment.bodyHtml;
