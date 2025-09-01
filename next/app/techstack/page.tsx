@@ -1,10 +1,10 @@
 import Layout from '@/components/layout/Layout'
-import { SkillsSection } from '@/components/sections/Skills'
+import { ThisPageTech } from '@/components/sections/ThisPageTech'
 
 export default function TechStackPage() {
   return (
     <Layout currentPageName="TechStack">
-      <SkillsSection />
+      <ThisPageTech />
     </Layout>
   )
 }

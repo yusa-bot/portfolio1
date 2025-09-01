@@ -6,8 +6,8 @@ import { Calendar, Heart, MessageCircle, ExternalLink, Users, Lock } from 'lucid
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ZennScrap } from '@/components/updates/zenn_scrap/type';
-import { ZennContentRenderer } from '@/components/updates/zenn_scrap/ZennContentRenderer';
+import { ZennScrap } from './type';
+import { ZennContentRenderer } from './ZennContentRenderer';
 
 interface ZennScrapMainProps {
   scrap: ZennScrap;

@@ -4,12 +4,12 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ExternalLink, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { QiitaArticleCard } from '@/components/updates/articles/Qiita/QiitaArticleCard';
-import { QiitaArticle } from '@/components/updates/articles/Qiita/type';
-import { ZennArticleCard } from '@/components/updates/articles/zenn/ZennArticleCard';
-import { ZennArticle } from '@/components/updates/articles/zenn/type';
-import { ZennScrap } from '@/components/updates/zenn_scrap/type';
-import { ZennScrapMain } from '@/components/updates/zenn_scrap/ZennScrapMain';
+import { QiitaArticleCard } from './Updates/Articles/Qiita/QiitaArticleCard';
+import { QiitaArticle } from './Updates/Articles/Qiita/type';
+import { ZennArticleCard } from './Updates/Articles/Zenn/ZennArticleCard';
+import { ZennArticle } from './Updates/Articles/Zenn/type';
+import { ZennScrap } from './Updates/ZennScrap/type';
+import { ZennScrapMain } from './Updates/ZennScrap/ZennScrapMain';
 
 export const BlogSection = () => {
   const [articles, setArticles] = useState<QiitaArticle[]>([]);
