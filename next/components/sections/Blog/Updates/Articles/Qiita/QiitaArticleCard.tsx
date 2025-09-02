@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { Calendar, Heart, MessageCircle, ExternalLink } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
-import { ArticleCardProps } from '@/components/updates/articles/Qiita/type';
+import { ArticleCardProps } from './type';
 
 export const QiitaArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
   const formatDate = (dateString: string) => {

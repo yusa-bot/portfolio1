@@ -98,12 +98,10 @@ export const ZennScrapMain: React.FC<ZennScrapMainProps> = ({ scrap }) => {
               {/* 日付情報 */}
               <div className="flex items-center gap-4 text-sm text-slate-600">
                 <div className="flex items-center gap-1">
-                  <Calendar className="w-4 h-4" />
                   <span>開始: {formatDate(scrap.createdAt)}</span>
                 </div>
                 {scrap.lastCommentAt && (
                   <div className="flex items-center gap-1">
-                    <MessageCircle className="w-4 h-4" />
                     <span>最終更新: {formatRelativeTime(scrap.lastCommentAt)}</span>
                   </div>
                 )}
@@ -129,16 +127,17 @@ export const ZennScrapMain: React.FC<ZennScrapMainProps> = ({ scrap }) => {
                 className="mb-6"
               />
 
-              <div className="mt-6 pt-4 border-t border-purple-100 text-center">
+              <div className="mt-6 pt-4 border-t border-purple-100 flex justify-center">
                 <Button
                   onClick={handleViewScrap}
                   variant="outline"
-                  className="border-purple-200 text-purple-600 hover:bg-purple-50"
+                  className="border-purple-200 text-purple-600 hover:bg-purple-50 flex items-center"
                 >
                   <ExternalLink className="w-4 h-4 mr-2" />
                   Zennで続きを読む
                 </Button>
               </div>
+
             </div>
           ) : scrap.bodyMarkdown ? (
             <div className="prose max-w-none text-slate-700 leading-relaxed">

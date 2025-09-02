@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { getProcessedScrapContent } from '../../../../features/zenn-scrap';
+import { getProcessedScrapContent } from '../../../../features/ZennScrap';
 
 const ZennScrapSchema = z.object({
   id: z.number(),

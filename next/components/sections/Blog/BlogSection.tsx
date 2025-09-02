@@ -134,9 +134,14 @@ export const BlogSection = () => {
 
           {/* 最新記事セクション */}
           <div className="mb-12">
-            <h3 className="text-2xl font-semibold text-slate-800 mb-8 text-center">
+            <h1 className="text-3xl font-thin text-slate-800 mb-8">
               最新記事
-            </h3>
+            </h1>
+            <p className="text-lg text-slate-600 font-light">
+              各サービスのAPIから最新記事を取得し、表示しています。<br />
+              取得タイミング
+              目次
+            </p>
 
             {isLoading && (
               <div className="flex justify-center items-center py-12">
@@ -155,7 +160,7 @@ export const BlogSection = () => {
             )}
 
             {!isLoading && !error && (articles.length > 0 || zennArticles.length > 0) && (
-              <div className="space-y-12">
+              <div className="space-y-12 mt-12">
                 {/* Qiita記事 */}
                 {articles.length > 0 && (
                   <div>
