@@ -63,10 +63,11 @@ export const ZennScrapMain: React.FC<ZennScrapMainProps> = ({ scrap }) => {
           API取得からの表示までの実装工夫を記載しています。
           <Button
               onClick={handleViewTech}
-              className="bg-purple-600 hover:bg-purple-700 text-white"
+              className="bg-purple-600 hover:bg-purple-700 text-white flex items-center"
               size="sm"
           >
             <ExternalLink className="w-3 h-3 mr-1" />
+            技術詳細
           </Button>
         </p>
       </div>
@@ -111,10 +112,11 @@ export const ZennScrapMain: React.FC<ZennScrapMainProps> = ({ scrap }) => {
             {/* 詳細ボタン */}
             <Button
               onClick={handleViewScrap}
-              className="bg-purple-600 hover:bg-purple-700 text-white"
+              className="bg-purple-600 hover:bg-purple-700 text-white flex items-center"
               size="sm"
             >
               <ExternalLink className="w-3 h-3 mr-1" />
+              詳細を見る
             </Button>
           </div>
         </CardHeader>

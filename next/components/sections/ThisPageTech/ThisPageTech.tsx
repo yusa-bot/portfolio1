@@ -59,14 +59,15 @@ export const ThisPageTech: React.FC<ThisPageTechProps> = ({ className = '' }) =>
           </div>
 
           {/* フッター */}
-          <div className="text-center pt-6 border-t border-slate-200">
+          <div className="mt-6 pt-4 border-purple-100 flex justify-center">
             <Button
+              size="lg"
               variant="outline"
-              className="text-slate-600 hover:text-slate-900"
+              className="px-8 py-3 border-gray-300 hover:border-gray-400 flex items-center"
               onClick={() => window.open('https://github.com/yusa-bot/portfolio1', '_blank')}
             >
-              <ExternalLink className="w-4 h-4 mr-2" />
               GitHubで詳細を見る
+              <ExternalLink className="ml-2 h-4 w-4" />
             </Button>
           </div>
         </motion.div>

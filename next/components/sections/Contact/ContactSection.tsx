@@ -117,10 +117,16 @@ export const ContactSection = () => {
                 rows={6}
               />
             </div>
-            <Button type="submit" disabled={isSubmitting} className="w-full mt-4">
-              <Send className="w-4 h-4 mr-2" />
-              {isSubmitting ? '送信中...' : '送信'}
-            </Button>
+            <div className="mt-6 pt-4 border-purple-100 flex justify-center">
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="border-purple-200 text-purple-600 hover:bg-purple-50 flex items-center"
+              >
+                <Send className="w-4 h-4 mr-2" />
+                {isSubmitting ? '送信中...' : '送信'}
+              </Button>
+            </div>
           </form>
         </motion.div>
       </div>

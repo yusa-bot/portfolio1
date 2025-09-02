@@ -27,9 +27,7 @@ export const QiitaToc: React.FC<TocProps> = ({ article }) => {
   return (
     <div className="mt-4 border-t pt-4">
       <div className="flex items-center gap-2">
-        <List className="w-4 h-4 text-slate-500" />
-        <span className="text-sm font-medium text-slate-700">目次</span>
-        <span className="text-xs text-slate-500">({toc.length}項目)</span>
+        <span className="text-sm font-medium text-slate-700">contents</span>
       </div>
 
       <div className="mt-3 space-y-1 max-h-40 overflow-y-auto">
@@ -43,9 +41,9 @@ export const QiitaToc: React.FC<TocProps> = ({ article }) => {
                 className="mb-1"
                 style={{ marginLeft: `${indentPx}px` }}
               >
-                <div className="flex items-start py-1">
+                <div className="flex items-center py-1">
                   <span
-                    className={`mt-1 mr-2 inline-block rounded-full ${
+                    className={`mr-2 inline-block rounded-full ${
                       isTopLevel ? 'bg-green-500' : 'bg-green-300'
                     }`}
                     style={{ width: 6, height: 6 }}

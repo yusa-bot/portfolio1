@@ -200,39 +200,38 @@ export const BlogSection = () => {
             )}
           </div>
           <div className="flex justify-center gap-4 mb-12">
-            <Button
-              variant="outline"
-              className="text-slate-600 hover:text-green-600 border-slate-200"
-              onClick={() => window.open('https://qiita.com/yusa_a', '_blank')}
-            >
-              <ExternalLink className="w-4 h-4 mr-2" />
-              Qiita でもっと見る
-            </Button>
-            <Button
-              variant="outline"
-              className="text-slate-600 hover:text-blue-600 border-slate-200"
-              onClick={() => window.open('https://zenn.dev/ayusa', '_blank')}
-            >
-              <ExternalLink className="w-4 h-4 mr-2" />
-              Zenn でもっと見る
-            </Button>
-            <Button
-              variant="outline"
-              className="text-slate-600 hover:text-purple-600 border-slate-200"
-              onClick={() => window.open('https://zenn.dev/ayusa/scraps', '_blank')}
-            >
-              <ExternalLink className="w-4 h-4 mr-2" />
-              Scrap でもっと見る
-            </Button>
-            <Button
-              variant="outline"
-              onClick={handleRefresh}
-              disabled={isLoading}
-              className="text-slate-600 hover:text-slate-800 border-slate-200"
-            >
-              <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
-              更新
-            </Button>
+            <div className="mt-6 pt-4 border-purple-100 flex justify-center">
+              <Button
+                size="lg"
+                variant="outline"
+                className="px-8 py-3 border-gray-300 hover:border-gray-400 flex items-center"
+              >
+                Qiita
+                <ExternalLink className="ml-2 h-4 w-4" />
+              </Button>
+            </div>
+            <div className="mt-6 pt-4 border-purple-100 flex justify-center">
+              <Button
+                size="lg"
+                variant="outline"
+                className="px-8 py-3 border-gray-300 hover:border-gray-400 flex items-center"
+              >
+                Zenn
+                <ExternalLink className="ml-2 h-4 w-4" />
+              </Button>
+            </div>
+            <div className="mt-6 pt-4 border-purple-100 flex justify-center">
+              <Button
+                variant="outline"
+                size="lg"
+                onClick={handleRefresh}
+                disabled={isLoading}
+                className="px-8 py-3 border-gray-300 hover:border-gray-400 flex items-center"
+              >
+                <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+                更新
+              </Button>
+            </div>
           </div>
         </motion.div>
       </div>

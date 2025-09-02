@@ -142,8 +142,8 @@ export const ProjectsSection = () => {
                             target="_blank"
                             rel="noopener noreferrer"
                           >
-                            <ExternalLink size={14} />
                             View Project
+                            <ExternalLink size={14} className="ml-2 h-4 w-4"/>
                           </a>
                         </Button>
                       )}
@@ -184,14 +184,17 @@ export const ProjectsSection = () => {
               transition={{ duration: 0.6, delay: 0.3 }}
               className="text-center mt-12"
             >
-              <Button
-                size="lg"
-                variant="outline"
-                className="px-8 py-3 border-gray-300 hover:border-gray-400"
-              >
-                View All Projects
-                <ExternalLink className="ml-2 h-4 w-4" />
-              </Button>
+              <div className="mt-6 pt-4 border-purple-100 flex justify-center">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="px-8 py-3 border-gray-300 hover:border-gray-400 flex items-center"
+                >
+                  View All Projects
+                  <ExternalLink className="ml-2 h-4 w-4" />
+                </Button>
+              </div>
+
             </motion.div>
           )}
         </motion.div>
