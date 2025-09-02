@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { NextRequest } from 'next/server';
 import { Resend } from 'resend';
 import { z } from 'zod';

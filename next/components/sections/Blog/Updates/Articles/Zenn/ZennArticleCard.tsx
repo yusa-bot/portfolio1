@@ -1,13 +1,49 @@
 "use client";
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Calendar, Heart, MessageCircle, ExternalLink, FileText } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
-import { ZennArticleCardProps } from '@/components/updates/articles/zenn/type';
+import { ZennArticleCardProps, ZennArticle } from './type';
+import { ZennToc } from './Toc';
 
 export const ZennArticleCard: React.FC<ZennArticleCardProps> = ({ article }) => {
+  const [articleWithToc, setArticleWithToc] = useState<ZennArticle>(article);
+  const [isLoadingToc, setIsLoadingToc] = useState(false);
+
+  // 記事詳細（TOC付き）を取得
+  useEffect(() => {
+    const fetchArticleToc = async () => {
+      if (article.toc && article.toc.length > 0) {
+        return; // 既にTOCがある場合はスキップ
+      }
+
+      try {
+        setIsLoadingToc(true);
+
+        // URLからslugを抽出
+        const slug = article.url.split('/').pop();
+        if (!slug) {
+          return;
+        }
+
+        const response = await fetch(`/api/updates/articles/zenn/detail?slug=${slug}`);
+        if (!response.ok) {
+          return;
+        }
+
+        const articleDetail = await response.json();
+        setArticleWithToc(articleDetail);
+      } catch (error) {
+        // TOC取得に失敗してもエラーを表示しない
+      } finally {
+        setIsLoadingToc(false);
+      }
+    };
+
+    fetchArticleToc();
+  }, [article.id, article.toc, article.url]);
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('ja-JP', {
@@ -25,7 +61,7 @@ export const ZennArticleCard: React.FC<ZennArticleCardProps> = ({ article }) => 
   };
 
   const handleCardClick = () => {
-    window.open(article.url, '_blank', 'noopener,noreferrer');
+    window.open(articleWithToc.url, '_blank', 'noopener,noreferrer');
   };
 
   return (
@@ -41,24 +77,24 @@ export const ZennArticleCard: React.FC<ZennArticleCardProps> = ({ article }) => 
         onClick={handleCardClick}
       >
         <CardHeader className="pb-3">
-          <div className="flex items-start justify-between gap-3">
-            <div className="flex items-start gap-2">
-              <span className="text-xl flex-shrink-0">{article.emoji}</span>
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <span className="text-xl flex-shrink-0">{articleWithToc.emoji}</span>
               <h3 className="text-lg font-semibold text-slate-800 leading-snug overflow-hidden" style={{
                 display: '-webkit-box',
                 WebkitLineClamp: 2,
                 WebkitBoxOrient: 'vertical'
               }}>
-                {article.title}
+                {articleWithToc.title}
               </h3>
             </div>
-            <ExternalLink className="w-5 h-5 text-slate-400 flex-shrink-0 mt-1" />
+            <ExternalLink className="w-5 h-5 text-slate-400 flex-shrink-0" />
           </div>
         </CardHeader>
 
         <CardContent className="pb-4">
           <div className="flex flex-wrap gap-2 mb-4">
-            {article.tags.map((tag) => (
+            {articleWithToc.tags.map((tag) => (
               <Badge
                 key={tag}
                 variant="secondary"
@@ -72,31 +108,41 @@ export const ZennArticleCard: React.FC<ZennArticleCardProps> = ({ article }) => 
           <div className="flex items-center gap-4 text-sm text-slate-500">
             <div className="flex items-center gap-1">
               <Calendar className="w-4 h-4" />
-              <span>{formatDate(article.createdAt)}</span>
+              <span>{formatDate(articleWithToc.createdAt)}</span>
             </div>
             <div className="flex items-center gap-1">
               <Heart className="w-4 h-4" />
-              <span>{article.likesCount}</span>
+              <span>{articleWithToc.likesCount}</span>
             </div>
             <div className="flex items-center gap-1">
               <FileText className="w-4 h-4" />
-              <span>{formatBodyLength(article.bodyLettersCount)}</span>
+              <span>{formatBodyLength(articleWithToc.bodyLettersCount)}</span>
             </div>
           </div>
+
+          {/* TOC表示 */}
+          {isLoadingToc && (
+            <div className="mt-4 text-xs text-slate-500">記事詳細を読み込み中...</div>
+          )}
+          {articleWithToc.toc && articleWithToc.toc.length > 0 && (
+            <div className="mt-4">
+              <ZennToc article={articleWithToc} />
+            </div>
+          )}
         </CardContent>
 
         <CardFooter className="pt-0">
           <div className="flex items-center gap-3 w-full">
             <img
-              src={article.author.profileImageUrl}
-              alt={article.author.name}
+              src={articleWithToc.author.profileImageUrl}
+              alt={articleWithToc.author.name}
               className="w-8 h-8 rounded-full border-2 border-blue-100"
             />
             <div className="flex flex-col">
               <span className="text-sm font-medium text-slate-700">
-                {article.author.name}
+                {articleWithToc.author.name}
               </span>
-              <span className="text-xs text-slate-500">@{article.author.id}</span>
+              <span className="text-xs text-slate-500">@{articleWithToc.author.id}</span>
             </div>
           </div>
         </CardFooter>

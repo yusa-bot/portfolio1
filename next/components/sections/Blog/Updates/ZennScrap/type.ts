@@ -4,4 +4,4 @@ export {
   type ProcessedContent,
   type ZennScrap,
   type ZennScrapAuthor,
-} from '../../../types/zenn-scrap';
+} from '@/types/zenn-scrap';

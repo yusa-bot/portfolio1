@@ -14,8 +14,20 @@ export interface ZennArticle {
   };
   emoji: string;
   bodyLettersCount: number;
+  toc?: TocItem[]; // TOC情報（任意）
 }
 
 export interface ZennArticleCardProps {
+  article: ZennArticle;
+}
+
+export interface TocItem {
+  id: string;
+  text: string;
+  level: number;
+  base?: number;
+}
+
+export interface TocProps {
   article: ZennArticle;
 }
