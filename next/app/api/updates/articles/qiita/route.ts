@@ -9,6 +9,7 @@ const QiitaArticleSchema = z.object({
   updated_at: z.string(),
   likes_count: z.number(),
   comments_count: z.number(),
+  body: z.string().optional(), // マークダウン本文
   tags: z.array(z.object({
     name: z.string(),
     versions: z.array(z.string()).optional(),
@@ -51,6 +52,7 @@ export async function GET(request: NextRequest) {
       updatedAt: article.updated_at,
       likesCount: article.likes_count,
       commentsCount: article.comments_count,
+      body: article.body, // マークダウン本文を追加
       tags: article.tags.map(tag => tag.name),
       author: {
         id: article.user.id,

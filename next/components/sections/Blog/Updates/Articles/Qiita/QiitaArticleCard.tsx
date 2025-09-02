@@ -6,6 +6,7 @@ import { Calendar, Heart, MessageCircle, ExternalLink } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { ArticleCardProps } from './type';
+import { QiitaToc } from './Toc';
 
 export const QiitaArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
   const formatDate = (dateString: string) => {
@@ -79,6 +80,9 @@ export const QiitaArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
               <span>{article.commentsCount}</span>
             </div>
           </div>
+
+          {/* 目次コンポーネント */}
+          <QiitaToc article={article} />
         </CardContent>
 
         <CardFooter className="pt-0">

@@ -12,8 +12,20 @@ export interface QiitaArticle {
     name: string;
     profileImageUrl: string;
   };
+  body?: string; // 目次生成用のマークダウン本文
 }
 
 export interface ArticleCardProps {
+  article: QiitaArticle;
+}
+
+export interface TocItem {
+  id: string;
+  text: string;
+  level: number;
+  base?: number;
+}
+
+export interface TocProps {
   article: QiitaArticle;
 }

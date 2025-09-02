@@ -64,9 +64,9 @@ export default function Updates() {
       if (qiitaResponse.status === 'fulfilled') {
         const raw = qiitaResponse.value.data || qiitaResponse.value || [];
         // 最新順（APIが既に降順ならsliceだけでOK）
-        const latestTwo = raw.slice(0, 2);
+        const latestTwo = raw.slice(0, 3);
 
-        // 通常の一覧用（既存通り）
+        // 本文冒頭　表示用
         setQiitaArticles(raw.slice(0, 3).map(article => {
           let description = '記事の概要';
           if (article.rendered_body) {
