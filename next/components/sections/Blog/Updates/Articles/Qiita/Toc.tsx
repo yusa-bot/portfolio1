@@ -19,18 +19,19 @@ export const QiitaToc: React.FC<TocProps> = ({ article }) => {
     return null;
   }
 
-  const handleTocItemClick = (e: React.MouseEvent, url: string) => {
+  const handleTocItemClick = (e: React.MouseEvent, url: string, itemId: string) => {
     e.stopPropagation(); // カード全体のクリックイベントを阻止
-    window.open(url, '_blank', 'noopener,noreferrer');
+    const fullUrl = `${url}#${itemId}`;
+    window.open(fullUrl, '_blank', 'noopener,noreferrer');
   };
 
   return (
-    <div className="mt-4 border-t pt-4">
-      <div className="flex items-center gap-2">
+    <div className="mt-4 p-3 bg-slate-50 rounded-lg border border-slate-200">
+      <div className="flex items-center gap-2 mb-3">
         <span className="text-sm font-medium text-slate-700">contents</span>
       </div>
 
-      <div className="mt-3 space-y-1 max-h-40 overflow-y-auto">
+      <div className="space-y-1">
           {toc.map((item, index) => {
             const indentPx = Math.max(0, (item.level || 2) - (item.base || 2)) * 16;
             const isTopLevel = (item.level || 2) === (item.base || 2);
@@ -49,7 +50,7 @@ export const QiitaToc: React.FC<TocProps> = ({ article }) => {
                     style={{ width: 6, height: 6 }}
                   />
                   <button
-                    onClick={(e) => handleTocItemClick(e, article.url)}
+                    onClick={(e) => handleTocItemClick(e, article.url, item.id)}
                     className="text-xs text-left text-slate-600 hover:text-green-600 hover:underline transition-colors duration-200 leading-relaxed"
                   >
                     {item.text}

@@ -36,11 +36,7 @@ export const ZennToc: React.FC<TocProps> = ({ article }) => {
   return (
     <div className="mt-4 p-3 bg-slate-50 rounded-lg border border-slate-200">
       <div className="flex items-center gap-2 mb-3">
-        <List className="w-4 h-4 text-blue-600" />
-        <span className="text-sm font-medium text-slate-700">目次</span>
-        <span className="text-xs text-slate-500 bg-slate-200 px-2 py-1 rounded-full">
-          {toc.length}項目
-        </span>
+        <span className="text-sm font-medium text-slate-700">contents</span>
       </div>
 
       <div className="space-y-1">

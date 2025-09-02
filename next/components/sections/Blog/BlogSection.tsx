@@ -138,9 +138,7 @@ export const BlogSection = () => {
               最新記事
             </h1>
             <p className="text-lg text-slate-600 font-light">
-              各サービスのAPIから最新記事を取得し、表示しています。<br />
-              取得タイミング
-              目次
+              各サービスのAPIから形式に合わせて最新記事と目次を自動取得し、成形後表示しています。<br />
             </p>
 
             {isLoading && (

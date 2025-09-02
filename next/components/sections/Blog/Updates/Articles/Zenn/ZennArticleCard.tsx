@@ -107,16 +107,7 @@ export const ZennArticleCard: React.FC<ZennArticleCardProps> = ({ article }) => 
 
           <div className="flex items-center gap-4 text-sm text-slate-500">
             <div className="flex items-center gap-1">
-              <Calendar className="w-4 h-4" />
               <span>{formatDate(articleWithToc.createdAt)}</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <Heart className="w-4 h-4" />
-              <span>{articleWithToc.likesCount}</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <FileText className="w-4 h-4" />
-              <span>{formatBodyLength(articleWithToc.bodyLettersCount)}</span>
             </div>
           </div>
 
@@ -130,22 +121,6 @@ export const ZennArticleCard: React.FC<ZennArticleCardProps> = ({ article }) => 
             </div>
           )}
         </CardContent>
-
-        <CardFooter className="pt-0">
-          <div className="flex items-center gap-3 w-full">
-            <img
-              src={articleWithToc.author.profileImageUrl}
-              alt={articleWithToc.author.name}
-              className="w-8 h-8 rounded-full border-2 border-blue-100"
-            />
-            <div className="flex flex-col">
-              <span className="text-sm font-medium text-slate-700">
-                {articleWithToc.author.name}
-              </span>
-              <span className="text-xs text-slate-500">@{articleWithToc.author.id}</span>
-            </div>
-          </div>
-        </CardFooter>
       </Card>
     </motion.div>
   );
